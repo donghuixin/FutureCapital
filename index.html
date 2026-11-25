@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>下一个生产力的代表</title>
+<meta name="description" content="从《共产党宣言》到 AI 神明：资本、生产力与 AI 的一分钟滚动叙事。">
+<meta property="og:title" content="下一个生产力的代表，可能不是人类">
+<meta property="og:description" content="从《共产党宣言》到 AI 神明：资本、生产力与 AI 的滚动叙事。">
+<meta property="og:image" content="https://donghuixin.github.io/FutureCapital/cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;600;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+/* VOICE  庄重、克制，像一部无声的历史纪录片
+   IDEA   一间按时间排列的展厅：每向下滚一步，历史往前走一秒
+   PICTURE 16:9 的放映幕，由滚动驱动的逐帧动画
+   COLOUR 暖黑底，金=资本、暖橙=人、冰蓝=AI，纸白文字
+   TYPE   思源宋体做标题与旁白，思源黑体做小标签
+   LAYOUT 放映幕居中固定，旁白在幕下，右侧是幕次导航 */
+:root{color-scheme:dark;--bg:#0b0a09;--ink:#efe6d6;--dim:#8d857a;--gold:#e8b86a;--blue:#8fc8ff}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:16px/1.6 "Noto Sans SC",system-ui,sans-serif;overflow-x:clip}
+.track{position:relative;height:4200vh}
+.stage{position:sticky;top:0;height:100vh;height:100dvh;display:grid;grid-template-rows:1fr auto;align-items:center;justify-items:center;padding:clamp(8px,2vw,28px) clamp(8px,4vw,64px) 0}
+.screen{position:relative;width:min(100%,calc((100dvh - 150px)*16/9));aspect-ratio:16/9;background:#000;box-shadow:0 30px 120px rgba(0,0,0,.6)}
+canvas#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cap{min-height:118px;width:min(100%,960px);text-align:center;padding:14px 12px 22px}
+.cap p{margin:0;font:600 clamp(17px,2.2vw,24px)/1.5 "Noto Serif SC",serif;letter-spacing:.02em;transition:opacity .25s}
+.cap small{display:block;margin-top:6px;color:var(--dim);font-size:13px}
+.intro{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:radial-gradient(ellipse at 50% 45%,#16110c 0%,#000 70%);transition:opacity .4s}
+.intro h1{margin:0;font:700 clamp(32px,5.4vw,64px)/1.1 "Noto Serif SC",serif;letter-spacing:.04em;text-wrap:balance}
+.intro p{margin:16px 0 0;color:var(--dim);font-size:15px}
+.intro .hint{margin-top:34px;color:var(--gold);font-size:14px;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+.rail{position:fixed;right:clamp(8px,1.6vw,24px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:3}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:44px;color:var(--dim);font:500 13px "Noto Serif SC",serif}
+.rail button i{width:8px;height:8px;border-radius:50%;border:1px solid currentColor;flex:none}
+.rail button.on{color:var(--gold)}.rail button.on i{background:currentColor}
+.rail button:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.rail span{opacity:0;transition:opacity .2s}.rail:hover span,.rail button.on span{opacity:1}
+.bar{position:fixed;left:0;top:0;height:2px;background:var(--gold);z-index:3;width:0}
+.ctl{position:fixed;left:clamp(8px,1.6vw,24px);bottom:clamp(8px,1.6vw,20px);display:flex;gap:8px;z-index:3}
+.ctl button{all:unset;cursor:pointer;min-height:44px;padding:0 16px;border:1px solid #2c2822;border-radius:22px;color:var(--ink);font-size:14px;background:rgba(11,10,9,.8)}
+.ctl button:focus-visible{outline:2px solid var(--gold)}
+.loading{position:absolute;inset:auto 0 12px 0;text-align:center;color:var(--dim);font-size:13px}
+.credits{position:relative;background:var(--bg);padding:clamp(40px,6vw,96px) max(5vw,16px);max-width:900px;margin:0 auto}
+.credits h2{font:700 clamp(26px,3.4vw,38px)/1.15 "Noto Serif SC",serif;margin:0 0 18px}
+.credits p,.credits li{color:#c9c0b2;font-size:15px}
+.credits ul{padding-left:1.1em}
+.credits a{color:var(--gold)}
+@media (max-width:600px){.rail span{display:none}.cap{min-height:96px}.screen{width:100%}}
+@media (prefers-reduced-motion:reduce){.intro .hint{animation:none}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="track" id="track">
+  <div class="stage">
+    <div class="screen">
+      <canvas id="stage" width="1920" height="1080" aria-label="随滚动播放的动画"></canvas>
+      <div class="intro" id="intro">
+        <div>
+          <h1>下一个生产力的代表</h1>
+          <p>从《共产党宣言》到 AI 神明</p>
+          <p class="hint">向下滚动，或点左下角“有声播放”</p>
+        </div>
+      </div>
+      <div class="loading" id="loading">载入素材中…</div>
+    </div>
+    <div class="cap" aria-live="polite"><p id="line">&nbsp;</p><small id="act">&nbsp;</small></div>
+  </div>
+</div>
+<nav class="rail" id="rail" aria-label="幕次"></nav>
+<div class="ctl"><button id="play" type="button">▶ 有声播放</button><button id="mute" type="button" aria-pressed="false">🔊 声音</button></div>
+<audio id="mix" preload="auto"></audio>
+<section class="credits">
+  <h2>素材与出处</h2>
+  <ul>
+    <li>马克思肖像：J.J.E. Mayall 摄，1875，公有领域；画面为程序生成的版画排线稿。</li>
+    <li>引文：马克思、恩格斯《共产党宣言》，1848；中文为中央编译局译本。</li>
+    <li>蒸汽机（1784）、动力织布机（1835）、福特流水线（1913）、伦勃朗《布商行会理事》（1662）、贝恩斯纺纱厂版画（1835）：公有领域。</li>
+    <li>GA100 芯片显微照：Kurnal Insights，CC BY 3.0。数据中心照片：Carl Lender，CC BY 2.0。</li>
+    <li>世界 GDP：Maddison Project Database 2023；1820 年前为 Maddison (2017) 估算，经 Our World in Data。</li>
+    <li>地图：Natural Earth，公有领域，仅绘陆地点阵。</li>
+    <li>《创造亚当》：米开朗基罗，约 1512，公有领域。</li>
+    <li>AI 看板娘：非官方同人形象，与各公司无关；原图作者待确认署名。</li>
+    <li>口播：ElevenLabs 合成；音效与配乐由程序生成。</li>
+    <li>赛道中的产品标志为各公司商标，仅作评论性指代。</li>
+  </ul>
+  <p>精英剪影只表现身份，不对应任何真实人物。</p>
+</section>
+<script src="gods.js"></script>
+<script src="film.js"></script>
+<script>
+{
+  // 时间轴以配音为准：0–T_MAX 秒；画面用 oldT() 换算到动画时间
+  const SUBS = [[0.8,5.98,'马克思说过：资产阶级在不到一百年的统治中创造的生产力，'],[6.39,10.69,'比过去一切世代创造的全部生产力还要多，还要大。'],[11.85,14.97,'生产力的爆发，必然带来生产关系的变革；'],[15.36,17.98,'新生产力的代表，必然取代旧的。'],[18.56,19.3,'他说对了。'],[20.32,24.2,'但他没想到，下一个生产力的代表，可能不是人类。'],[24.71,27.06,'资本没有国籍，也没有忠诚。'],[27.47,29.42,'它只跟着最先进的生产力走。'],[29.86,32.66,'从商人，到工厂主，到科技巨头。'],[33.23,36.53,'而现在，它找到了更好的选择：AI。'],[36.93,38.75,'造 AI 的公司谁敢停下？'],[38.99,40.7,'停一步，就被对手甩开。'],[41.13,42.42,'不是人在推 AI，'],[42.75,45.53,'是 AI 和资本一起，推着人往前跑。'],[46.19,50.74,'工业革命后，一百年的产出，就追平了此前近两千年的总和。'],[51.3,53.31,'AI，也许用不了十年。'],[54.0,56.39,'当它可能比全人类加起来都聪明，'],[56.86,58.39,'人，还剩下什么？'],[58.86,59.9,'定规则的权力？'],[60.63,62.6,'AI 会和人类共生吗？'],[63.12,64.86,'它会一直为人类服务吗？'],[65.58,67.73,'当人类跟不上 AI 进化的速度，'],[68.22,70.62,'被抛弃的，也许就是人类自己。']];
+  const ACT = [[0,'序 · 引文'],[11.7,'第一幕 · 生产力'],[24.6,'第二幕 · 资本'],[41.0,'第三幕 · 神明'],[58.7,'尾声 · 规则与双手'],[71.85,'终章 · 巨像']];
+  const track = document.getElementById('track'), line = document.getElementById('line'), actEl = document.getElementById('act');
+  const rail = document.getElementById('rail'), bar = document.getElementById('bar'), intro = document.getElementById('intro');
+  const audio = document.getElementById('mix'), btn = document.getElementById('play'), mute = document.getElementById('mute');
+  const INTRO = 0.025, TMAX = () => (window.T_MAX || 79.3) - 0.02;
+  rail.innerHTML = ACT.map(([t, n]) => `<button type="button" data-t="${t}"><span>${n}</span><i></i></button>`).join('');
+  const span = () => track.offsetHeight - innerHeight;
+  const tFromScroll = () => { const p = Math.min(1, Math.max(0, scrollY / Math.max(1, span()))); return Math.max(0, (p - INTRO) / (1 - INTRO)) * TMAX(); };
+  const scrollForT = (t) => (INTRO + t / TMAX() * (1 - INTRO)) * span();
+  let cur = 0, last = -1, playing = false;
+  function setBtn() { btn.textContent = playing ? '❚❚ 暂停' : '▶ 有声播放'; }
+  function stopPlay() { if (!playing) return; playing = false; audio.pause(); setBtn(); }
+  async function startPlay() {
+    let t = tFromScroll(); if (t >= TMAX() - 0.1) { t = 0; scrollTo(0, scrollForT(0)); }
+    try {
+      if (audio.readyState < 1) await new Promise(r => { audio.addEventListener('loadedmetadata', r, { once: true }); audio.load(); setTimeout(r, 4000); });
+      audio.currentTime = t; await audio.play();
+      if (Math.abs(audio.currentTime - t) > 0.5) audio.currentTime = t;
+    } catch (e) { /* 无法播放声音时仍按时钟播放画面 */ }
+    playing = true; clock = performance.now() - t * 1000; setBtn();
+  }
+  let clock = 0;
+  btn.onclick = () => playing ? stopPlay() : startPlay();
+  mute.onclick = () => { audio.muted = !audio.muted; mute.textContent = audio.muted ? '🔇 静音' : '🔊 声音'; mute.setAttribute('aria-pressed', audio.muted); };
+  audio.addEventListener('ended', stopPlay);
+  // 先整段载入为本地 blob，保证任意位置都能跳转播放
+  fetch('audio/mix.m4a').then(r => r.blob()).then(b => { audio.src = URL.createObjectURL(b); }).catch(() => { audio.src = 'audio/mix.m4a'; });
+  rail.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { const was = playing; stopPlay(); scrollTo({ top: scrollForT(+b.dataset.t + 0.05), behavior: was ? 'auto' : 'smooth' }); if (was) setTimeout(startPlay, 50); } });
+  addEventListener('wheel', stopPlay, { passive: true });
+  addEventListener('touchmove', stopPlay, { passive: true });
+  addEventListener('keydown', e => { if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); playing ? stopPlay() : startPlay(); } });
+  function frame(now) {
+    let target;
+    if (playing) {
+      target = (!audio.paused && audio.currentTime > 0) ? audio.currentTime : (now - clock) / 1000;
+      if (target >= TMAX()) { target = TMAX(); stopPlay(); }
+      scrollTo(0, scrollForT(target)); cur = target;
+    } else {
+      target = tFromScroll(); cur += (target - cur) * 0.14; if (Math.abs(target - cur) < 0.002) cur = target;
+    }
+    const p = scrollY / Math.max(1, span());
+    intro.style.opacity = Math.max(0, 1 - p / INTRO * 1.4); intro.style.pointerEvents = p > INTRO * 0.5 ? 'none' : 'auto';
+    bar.style.width = (p * 100).toFixed(2) + '%';
+    if (window.READY && Math.abs(cur - last) > 0.0005) {
+      try { renderAt(Math.min(67.49, oldT(cur))); } catch (err) { console.error(err); }
+      last = cur;
+      const s = SUBS.find(([a, b]) => cur >= a && cur < b);
+      const txt = s ? s[2] : ' '; if (line.textContent !== txt) line.textContent = txt;
+      const a = ACT.filter(x => cur >= x[0]).pop(); actEl.textContent = a[1];
+      [...rail.children].forEach((b, i) => b.classList.toggle('on', ACT[i] === a));
+    }
+    requestAnimationFrame(frame);
+  }
+  const sample = '马克思恩格斯说资产阶级在它的不到一百年的阶级统治中所创造的生产力比过去一切世代全部还要多大《共产党宣言》蒸汽机器工厂流水线芯片生产关系可能不是人类没有国籍也忠诚商人工厂主科技巨头今天谁敢停下推着人往前跑年≈十？还剩什么规则第一二三条拥有最终决定权必须服务于任何系统得越过此线定权力共生被抛弃许就我们自己序幕神明尾声与双手世界万亿国际元价数据看板娘为非官方同人形象各公司无关，。—代表';
+  Promise.all([document.fonts.load('700 40px "Noto Serif SC"', sample), document.fonts.load('900 40px "Noto Sans SC"', 'AI'), document.fonts.load('400 24px "Noto Sans SC"', sample), document.fonts.load('40px "UnifrakturMaguntia"', 'Manifest')]).catch(() => {}).then(() => {
+    const wait = () => { if (window.READY) { const l = document.getElementById('loading'); if (l) l.remove(); last = -1; } else setTimeout(wait, 100); }; wait();
+  });
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
