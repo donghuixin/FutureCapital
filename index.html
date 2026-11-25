@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>下一个生产力的代表</title>
 <meta name="description" content="从《共产党宣言》到 AI 神明：资本、生产力与 AI 的一分钟滚动叙事。">
-<meta property="og:title" content="下一个生产力的代表，可能不是人类">
+<meta property="og:title" content="马克思说对了一半，另一半是 AI">
 <meta property="og:description" content="从《共产党宣言》到 AI 神明：资本、生产力与 AI 的滚动叙事。">
 <meta property="og:image" content="https://donghuixin.github.io/FutureCapital/cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -63,8 +63,8 @@ canvas#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
       <canvas id="stage" width="1920" height="1080" aria-label="随滚动播放的动画"></canvas>
       <div class="intro" id="intro">
         <div>
-          <h1>下一个生产力的代表</h1>
-          <p>从《共产党宣言》到 AI 神明</p>
+          <h1>马克思说对了一半</h1>
+          <p>另一半，是 AI · 下一个生产力的代表</p>
           <p class="hint">向下滚动，或点左下角“有声播放”</p>
         </div>
       </div>
@@ -97,12 +97,12 @@ canvas#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
 <script>
 {
   // 时间轴以配音为准：0–T_MAX 秒；画面用 oldT() 换算到动画时间
-  const SUBS = [[0.8,5.98,'马克思说过：资产阶级在不到一百年的统治中创造的生产力，'],[6.39,10.69,'比过去一切世代创造的全部生产力还要多，还要大。'],[11.85,14.97,'生产力的爆发，必然带来生产关系的变革；'],[15.36,17.98,'新生产力的代表，必然取代旧的。'],[18.56,19.3,'他说对了。'],[20.32,24.2,'但他没想到，下一个生产力的代表，可能不是人类。'],[24.71,27.06,'资本没有国籍，也没有忠诚。'],[27.47,29.42,'它只跟着最先进的生产力走。'],[29.86,32.66,'从商人，到工厂主，到科技巨头。'],[33.23,36.53,'而现在，它找到了更好的选择：AI。'],[36.93,38.75,'造 AI 的公司谁敢停下？'],[38.99,40.7,'停一步，就被对手甩开。'],[41.13,42.42,'不是人在推 AI，'],[42.75,45.53,'是 AI 和资本一起，推着人往前跑。'],[46.19,50.74,'工业革命后，一百年的产出，就追平了此前近两千年的总和。'],[51.3,53.31,'AI，也许用不了十年。'],[54.0,56.39,'当它可能比全人类加起来都聪明，'],[56.86,58.39,'人，还剩下什么？'],[58.86,59.9,'定规则的权力？'],[60.63,62.6,'AI 会和人类共生吗？'],[63.12,64.86,'它会一直为人类服务吗？'],[65.58,67.73,'当人类跟不上 AI 进化的速度，'],[68.22,70.62,'被抛弃的，也许就是人类自己。']];
-  const ACT = [[0,'序 · 引文'],[11.7,'第一幕 · 生产力'],[24.6,'第二幕 · 资本'],[41.0,'第三幕 · 神明'],[58.7,'尾声 · 规则与双手'],[71.85,'终章 · 巨像']];
+  const SUBS = [[4.94, 10.04, "马克思说过：资产阶级在不到一百年的统治中创造的生产力，"], [10.24, 14.51, "比过去一切世代创造的全部生产力还要多，还要大。"], [14.75, 17.88, "生产力的爆发，必然带来生产关系的变革；"], [18.12, 20.71, "新生产力的代表，必然取代旧的。"], [21.06, 21.77, "他说对了。"], [22.19, 26.05, "但他没想到，下一个生产力的代表，可能不是人类。"], [26.29, 28.61, "资本没有国籍，也没有忠诚。"], [28.85, 30.81, "它只跟着最先进的生产力走。"], [31.05, 33.81, "从商人，到工厂主，到科技巨头。"], [34.15, 37.43, "而现在，它找到了更好的选择：AI。"], [37.66, 39.44, "造 AI 的公司谁敢停下？"], [39.67, 41.35, "停一步，就被对手甩开。"], [41.59, 42.87, "不是人在推 AI，"], [43.18, 45.94, "是 AI 和资本一起，推着人往前跑。"], [46.31, 50.85, "工业革命后，一百年的产出，就追平了此前近两千年的总和。"], [51.09, 53.09, "AI，也许用不了十年。"], [53.33, 55.66, "当它可能比全人类加起来都聪明，"], [56.04, 57.53, "人，还剩下什么？"], [57.96, 58.96, "定规则的权力？"], [59.44, 61.4, "AI 会和人类共生吗？"], [61.64, 63.35, "它会一直为人类服务吗？"], [63.78, 65.9, "当人类跟不上 AI 进化的速度，"], [66.33, 68.7, "被抛弃的，也许就是人类自己。"]];
+  const ACT = [[0,'开场'],[4.4,'序 · 引文'],[voiceT(9),'第一幕 · 生产力'],[voiceT(18),'第二幕 · 资本'],[voiceT(33),'第三幕 · 神明'],[voiceT(48),'尾声 · 规则与双手'],[voiceT(60),'终章 · 巨像']];
   const track = document.getElementById('track'), line = document.getElementById('line'), actEl = document.getElementById('act');
   const rail = document.getElementById('rail'), bar = document.getElementById('bar'), intro = document.getElementById('intro');
   const audio = document.getElementById('mix'), btn = document.getElementById('play'), mute = document.getElementById('mute');
-  const INTRO = 0.025, TMAX = () => (window.T_MAX || 79.3) - 0.02;
+  const INTRO = 0.025, TMAX = () => (window.T_MAX || 76.1) - 0.02;
   rail.innerHTML = ACT.map(([t, n]) => `<button type="button" data-t="${t}"><span>${n}</span><i></i></button>`).join('');
   const span = () => track.offsetHeight - innerHeight;
   const tFromScroll = () => { const p = Math.min(1, Math.max(0, scrollY / Math.max(1, span()))); return Math.max(0, (p - INTRO) / (1 - INTRO)) * TMAX(); };
@@ -142,7 +142,7 @@ canvas#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
     intro.style.opacity = Math.max(0, 1 - p / INTRO * 1.4); intro.style.pointerEvents = p > INTRO * 0.5 ? 'none' : 'auto';
     bar.style.width = (p * 100).toFixed(2) + '%';
     if (window.READY && Math.abs(cur - last) > 0.0005) {
-      try { renderAt(Math.min(67.49, oldT(cur))); } catch (err) { console.error(err); }
+      try { drawAt(cur); } catch (err) { console.error(err); }
       last = cur;
       const s = SUBS.find(([a, b]) => cur >= a && cur < b);
       const txt = s ? s[2] : ' '; if (line.textContent !== txt) line.textContent = txt;
@@ -151,7 +151,7 @@ canvas#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
     }
     requestAnimationFrame(frame);
   }
-  const sample = '马克思恩格斯说资产阶级在它的不到一百年的阶级统治中所创造的生产力比过去一切世代全部还要多大《共产党宣言》蒸汽机器工厂流水线芯片生产关系可能不是人类没有国籍也忠诚商人工厂主科技巨头今天谁敢停下推着人往前跑年≈十？还剩什么规则第一二三条拥有最终决定权必须服务于任何系统得越过此线定权力共生被抛弃许就我们自己序幕神明尾声与双手世界万亿国际元价数据看板娘为非官方同人形象各公司无关，。—代表';
+  const sample = '马克思恩格斯说资产阶级在它的不到一百年的阶级统治中所创造的生产力比过去一切世代全部还要多大《共产党宣言》蒸汽机器工厂流水线芯片生产关系可能不是人类没有国籍也忠诚商人工厂主科技巨头今天谁敢停下推着人往前跑年≈十？还剩什么规则第一二三条拥有最终决定权必须服务于任何系统得越过此线定权力共生被抛弃许就我们自己序幕神明尾声与双手世界万亿国际元价数据看板娘为非官方同人形象各公司无关，。—代表另他没想到分钟看懂资本为什么非追可但你知道吗它新宿主竟然其实反了吧原来';
   Promise.all([document.fonts.load('700 40px "Noto Serif SC"', sample), document.fonts.load('900 40px "Noto Sans SC"', 'AI'), document.fonts.load('400 24px "Noto Sans SC"', sample), document.fonts.load('40px "UnifrakturMaguntia"', 'Manifest')]).catch(() => {}).then(() => {
     const wait = () => { if (window.READY) { const l = document.getElementById('loading'); if (l) l.remove(); last = -1; } else setTimeout(wait, 100); }; wait();
   });

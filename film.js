@@ -696,6 +696,9 @@ function goldDust(T) {
   }
   G.restore();
 }
+// 钩子词：在转折点上屏的短词（设计时间）
+const KICKERS = [[15.25, 16.2, '但是——', 960, 300, 96, '#efe6d6'], [18.25, 19.7, '你知道吗？', 960, 965, 60, GOLD], [26.1, 27.15, '它的新宿主，竟然是——', 960, 200, 64, '#efe6d6'],
+  [33.2, 34.85, '其实，反了。', 960, 230, 92, '#efe6d6'], [38.25, 40.3, '没想到吧？', 400, 400, 76, GOLD], [44.15, 45.2, '原来——', 960, 210, 88, '#fff3dc']];
 let BUF = null;
 window.renderAt = function (T) {
   G = G0; G.setTransform(1, 0, 0, 1, 0, 0); G.globalAlpha = 1; G.globalCompositeOperation = 'source-over'; G.filter = 'none';
@@ -725,11 +728,12 @@ window.renderAt = function (T) {
   if (ak > 0) { text(act[1], 72, 70, { size: 24, align: 'left', color: 'rgba(239,230,214,0.75)', alpha: ak, weight: 600 });
     G.save(); G.font = `600 24px ${SERIF}`; const w = G.measureText(act[1]).width; G.restore();
     text('· ' + act[2], 82 + w, 70, { size: 22, align: 'left', font: SANS, weight: 400, color: 'rgba(239,230,214,0.5)', alpha: ak }); }
+  KICKERS.forEach(([a, b, str, x, y, size, col]) => { if (T >= a - 0.01 && T < b + 0.4) rise(str, x, y, a, T, { size, color: col, out: b, dur: 0.28, glow: 'rgba(0,0,0,0.95)', blur: 30 }); });
   grain(T);
 };
 // 口播对齐：新时间（随配音）→ 原动画时间，分段线性
-const SPEED = 1.06, LEAD = 0.8;
-const VOICE = [[0.6, 0.0], [4.6, 5.93], [9.1, 11.71], [11.4, 15.43], [14.05, 18.83], [15.3, 20.69], [18.1, 25.34], [20.0, 28.27], [22.2, 30.80], [26.1, 34.38], [29.1, 38.30], [31.0, 40.48], [33.1, 42.75], [35.2, 44.46], [38.1, 48.11], [42.0, 53.53], [44.1, 56.43], [46.3, 59.42], [48.2, 61.54], [51.2, 63.42], [53.5, 66.06], [56.1, 68.67], [57.9, 71.46], [60.0, 75.3]];
+const SPEED = 1.06, LEAD = 0.5, COLD = 4.4;
+const VOICE = [[0.6, 0.04], [4.6, 5.66], [9.1, 10.44], [11.4, 14.01], [14.05, 17.13], [15.3, 18.33], [18.1, 22.67], [20.0, 25.39], [22.2, 27.72], [26.1, 31.0], [29.1, 34.73], [31.0, 36.86], [33.1, 38.89], [35.2, 40.58], [38.1, 43.9], [42.0, 48.96], [44.1, 51.33], [46.3, 54.21], [48.2, 56.24], [51.2, 57.81], [53.5, 60.14], [56.1, 62.41], [57.9, 65.11], [60.0, 67.54]];
 const WARP = [[0, 0]].concat(VOICE.map(([o, v]) => [LEAD + v / SPEED, o]));
 WARP.push([WARP[WARP.length - 1][0] + 7.5, 67.5]);
 window.T_MAX = WARP[WARP.length - 1][0];
@@ -737,6 +741,31 @@ window.oldT = function (n) {
   for (let i = 1; i < WARP.length; i++) if (n <= WARP[i][0]) { const [n0, o0] = WARP[i - 1], [n1, o1] = WARP[i]; return o0 + (o1 - o0) * (n - n0) / (n1 - n0); }
   return 67.49;
 };
-window.frameAt = function (n, q) { renderAt(Math.min(67.49, oldT(n))); return cv.toDataURL('image/jpeg', q || 0.93); };
+// 冷开场：正片之前 COLD 秒，先把结尾的巨像和全片的问题亮出来
+function coldOpen(n) {
+  G = G0; G.setTransform(1, 0, 0, 1, 0, 0); G.globalAlpha = 1; G.globalCompositeOperation = 'source-over'; G.filter = 'none';
+  G.fillStyle = '#000'; G.fillRect(0, 0, W, H);
+  const beat = n < 1.5 ? 0 : n < 3.0 ? 1 : 2, bt = n - [0, 1.5, 3.0][beat];
+  if (beat < 2) {
+    const z = beat === 0 ? 1.0 + 0.04 * bt : 1.55 + 0.05 * bt, cy = beat === 0 ? H / 2 : 260;
+    G.save(); G.translate(W / 2, cy); G.scale(z, z); G.translate(-W / 2, -cy);
+    shot14(4.4 + n * 0.12); G.restore();
+    G.fillStyle = 'rgba(0,0,0,0.38)'; G.fillRect(0, 0, W, H);
+    if (beat === 0) rise('马克思说对了一半', 960, 800, 0.12, bt, { size: 110, color: '#fff3dc', glow: 'rgba(0,0,0,0.95)', blur: 40, dur: 0.3 });
+    else glitch('另一半，他没想到', 960, 800, n, Math.max(0, 1 - bt * 2.2), { size: 120, color: '#ffe9c4', glow: 'rgba(232,184,106,0.9)', font: SERIF, weight: 700 });
+    const fl = Math.max(0, 1 - bt / 0.14); if (fl > 0) { G.fillStyle = `rgba(255,240,215,${fl * 0.7})`; G.fillRect(0, 0, W, H); }
+  } else {
+    bg('#14100b', '#000');
+    rise('一分钟看懂', 960, 430, 0.05, bt, { size: 54, font: SANS, weight: 500, color: GOLD, dur: 0.3 });
+    rise('资本为什么非追 AI 不可', 960, 560, 0.25, bt, { size: 104, dur: 0.35 });
+    const out = seg(bt, 1.15, 1.4); if (out > 0) { G.fillStyle = `rgba(0,0,0,${out})`; G.fillRect(0, 0, W, H); }
+  }
+  G.setTransform(1, 0, 0, 1, 0, 0); goldDust(n + 40); vignette(0.6); grain(n);
+}
+window.T_MAX += COLD;
+window.COLD = COLD;
+window.drawAt = function (n) { if (n < COLD) coldOpen(n); else renderAt(Math.min(67.49, oldT(n - COLD))); };
+window.voiceT = function (o) { for (let i = 1; i < WARP.length; i++) if (o <= WARP[i][1]) { const [n0, o0] = WARP[i - 1], [n1, o1] = WARP[i]; return COLD + n0 + (n1 - n0) * (o - o0) / Math.max(1e-6, o1 - o0); } return window.T_MAX; };
+window.frameAt = function (n, q) { if (n < COLD) coldOpen(n); else renderAt(Math.min(67.49, oldT(n - COLD))); return cv.toDataURL('image/jpeg', q || 0.93); };
 window.frameJPEG = function (T, q) { renderAt(T); return cv.toDataURL('image/jpeg', q || 0.93); };
 loadAll();
